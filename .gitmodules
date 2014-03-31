@@ -7,9 +7,6 @@
 [submodule "lib/reslate"]
 	path = lib/reslate
 	url = https://github.com/jseb/reslate.git
-[submodule "indentLine"]
-	path = indentLine
-	url = https://github.com/Yggdroot/indentLine.git
 [submodule "lib/indentLine"]
 	path = lib/indentLine
 	url = https://github.com/Yggdroot/indentLine.git
