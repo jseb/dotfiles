@@ -4,6 +4,8 @@ shopt -s histappend
 
 export PROMPT_COMMAND="history -n; history -w; history -c; history -r"
 export EDITOR=vim
+# Cairo requires this (AssetGraph related..)
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig
 
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
