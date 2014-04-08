@@ -1,4 +1,5 @@
 export HISTCONTROL=ignoredups:erasedups
+export GIT_TREE=~/git_worktree
 export HISTSIZE=10000
 shopt -s histappend
 
@@ -44,6 +45,16 @@ relink_node() {
 
 upgrade_npm() {
     npm update -gf --loglevel=error >/dev/null
+}
+
+fetch() {
+    [[ ! "$GIT_TREE" ]] && return
+    cd $GIT_TREE
+    for repo in */
+    do
+        echo "==> fetching $repo"
+        (cd $repo && git remote update)
+    done
 }
 
 hr() {
