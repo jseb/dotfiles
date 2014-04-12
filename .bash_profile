@@ -50,11 +50,8 @@ upgrade_npm() {
 fetch() {
     [[ ! "$GIT_TREE" ]] && return
     cd $GIT_TREE
-    for repo in */
-    do
-        echo "==> fetching $repo"
-        (cd $repo && git remote update)
-    done
+    find . -name .git -type d -exec bash -c "echo -n '--> fetching ' &&
+        dirname {} | egrep -o '\w+.*' && cd {} && cd .. && git remote update" \;
 }
 
 hr() {
