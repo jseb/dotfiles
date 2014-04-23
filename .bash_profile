@@ -18,7 +18,7 @@ upgrade_casks() {
     for cask in $(brew cask list)
     do
         brew cask info $cask | grep -qiF 'Not installed' \
-            && brew cask install $cask
+            && brew cask uninstall $cask && brew cask install $cask
     done
     brew cask cleanup
 }
