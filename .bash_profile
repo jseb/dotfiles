@@ -15,12 +15,21 @@ alias ls="ls -lahG"
 alias s="git status"
 
 upgrade_casks() {
-    for cask in $(brew cask list | sed 's/(!)$//g')
+    old_ifs=$IFS
+    IFS=$'\n'
+    for cask in $(brew cask list)
     do
+        caskname=$(awk '{ print $1 }' <<< $cask)
+        if grep '(!)$' <<< $cask >/dev/null
+        then
+            echo "warning: the installed cask $caskname seems to be" \
+                "unavailable in homebrew-cask, has it been renamed?" && continue
+        fi
         brew cask info $cask | grep -qiF 'Not installed' \
             && brew cask uninstall $cask && brew cask install $cask
     done
     brew cask cleanup
+    IFS=$old_ifs
 }
 
 pupdate() {
