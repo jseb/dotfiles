@@ -15,7 +15,7 @@ alias ls="ls -lahG"
 alias s="git status"
 
 upgrade_casks() {
-    for cask in $(brew cask list)
+    for cask in $(brew cask list | sed 's/(!)$//g')
     do
         brew cask info $cask | grep -qiF 'Not installed' \
             && brew cask uninstall $cask && brew cask install $cask
