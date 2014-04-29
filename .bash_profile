@@ -25,8 +25,12 @@ upgrade_casks() {
             echo "warning: the installed cask $caskname seems to be" \
                 "unavailable in homebrew-cask, has it been renamed?" && continue
         fi
-        brew cask info $cask | grep -qiF 'Not installed' \
-            && brew cask uninstall $cask && brew cask install $cask
+        if brew cask info $cask | grep -qiF 'Not installed'
+        then
+            echo "--> upgrading cask $cask"
+            brew cask uninstall $cask
+            brew cask install $cask
+        fi
     done
     brew cask cleanup
     IFS=$old_ifs
