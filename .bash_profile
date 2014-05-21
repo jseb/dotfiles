@@ -28,7 +28,12 @@ upgrade_casks() {
         if brew cask info $cask | grep -qiF 'Not installed'
         then
             echo "--> upgrading cask $cask"
-            brew cask uninstall $cask
+            if ! brew cask uninstall $cask
+            then
+                echo "there was a problem with upgrading $cask, \
+                    needs to be uninstalled and reinstalled manually.."
+                continue
+            fi
             brew cask install $cask
         fi
     done
