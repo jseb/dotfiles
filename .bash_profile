@@ -62,7 +62,8 @@ relink_node() {
 }
 
 upgrade_npm() {
-    npm update -gf --loglevel=error >/dev/null
+    npm update -gf --loglevel=error 1>/dev/null 2>/dev/null || \
+        echo "there was a problem with upgrading npm packages.."
 }
 
 fetch() {
