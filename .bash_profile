@@ -30,8 +30,8 @@ upgrade_casks() {
             echo "--> upgrading cask $cask"
             if ! brew cask uninstall $cask
             then
-                echo "there was a problem with upgrading $cask, \
-                    needs to be uninstalled and reinstalled manually.."
+                echo "there was a problem with upgrading $cask," \
+                    "needs to be uninstalled and reinstalled manually.."
                 continue
             fi
             brew cask install $cask
