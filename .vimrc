@@ -3,6 +3,8 @@ set nocompatible
 set ruler
 set laststatus=2
 
+execute pathogen#infect()
+
 syntax enable
 colorscheme solarized
 
@@ -32,7 +34,6 @@ set cursorline
 :highlight ExtraWhitespace ctermbg=7
 :match ExtraWhitespace /\s\+$/
 
-execute pathogen#infect()
 
 let g:indentLine_faster = 1
 
