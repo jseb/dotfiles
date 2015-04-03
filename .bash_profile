@@ -104,3 +104,20 @@ alias p2="mpg123 -@ http://sverigesradio.se/topsy/direkt/163-hi-mp3.m3u"
 alias p3="mpg123 -@ http://sverigesradio.se/topsy/direkt/164-hi-mp3.m3u"
 
 export PATH="/usr/local/sbin:$PATH"
+hour=$(date +"%H")
+if [ "$hour" -ge 6 -a "$hour" -le 17 ]
+then
+    colorscheme='Solarized Light'
+else
+    colorscheme='Solarized Dark'
+fi
+setting="(first settings set whose name is \"$colorscheme\")"
+osascript << END
+tell application "Terminal"
+    repeat with w from 1 to count windows
+        repeat with t from 1 to count tabs of window w
+            set current settings of tab t of window w to $setting
+        end repeat
+    end repeat
+end tell
+END
