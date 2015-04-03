@@ -7,6 +7,12 @@ execute pathogen#infect()
 
 syntax enable
 colorscheme solarized
+let hour = strftime("%H")
+if 6 <= hour && hour <= 17
+  set background=light
+else
+  set background=dark
+endif
 
 set expandtab
 set sw=4
