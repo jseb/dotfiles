@@ -91,7 +91,7 @@ get_source_dir() {
     echo "$dir"
 }
 source $(get_source_dir)/lib/git-prompt/git-prompt
-PROMPT_COMMAND=git_prompt
+PROMPT_COMMAND="$PROMPT_COMMAND; git_prompt"
 
 alias p1="mpg123 -@ http://sverigesradio.se/topsy/direkt/132-hi-mp3.m3u"
 alias p2="mpg123 -@ http://sverigesradio.se/topsy/direkt/163-hi-mp3.m3u"
