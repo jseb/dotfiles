@@ -32,6 +32,7 @@ set ignorecase
 set autoindent
 
 set relativenumber
+set number
 
 set textwidth=80
 set colorcolumn=+1
