@@ -34,12 +34,15 @@ set autoindent
 set relativenumber
 set number
 
+" sane regexes
+nnoremap / /\v
+vnoremap / /\v
+
 set colorcolumn=+1
 set cursorline
 
 :highlight ExtraWhitespace ctermbg=7
 :match ExtraWhitespace /\s\+$/
-
 
 let g:indentLine_faster = 1
 
