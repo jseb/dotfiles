@@ -33,6 +33,8 @@ set autoindent
 
 set relativenumber
 set number
+" enables line numbering in the file browser
+let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 
 " sane regexes
 nnoremap / /\v
