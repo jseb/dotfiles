@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+
+valid_format() {
+    commit_msg=$1
+    first_line=$(sed -n '1p' <<< "$commit_msg")
+    valid_msg=true
+    error_msg=""
+
+    if ! [[ $first_line =~ ^.{0,79}[^.[:space:]][[:space:]]*$ ]]
+    then
+        valid_msg=false
+        error_msg="* first line does not match format"
+    fi
+
+    second_line=$(sed -n '2p' <<< "$commit_msg")
+
+    if [[ -n $second_line ]]
+    then
+        valid_msg=false
+        error_msg="$error_msg * missing blank line between heading and body"
+    fi
+
+    if ! $valid_msg
+    then
+        echo "$error_msg"
+        return 1
+    fi
+}
+
+log_error() {
+    error_msg=$1
+    editmsg=$2
+    echo "Aborting commit; $error_msg"
+    echo "The commit message is saved in $editmsg"
+    echo "To commit again and continue editing, run git commit -t $editmsg"
+}
+
+without_comments=$(grep -E '(^[^#]|^$)' "$1")
+
+if [[ -z $(echo $without_comments) ]] # echo trims whitespace and newlines
+then
+    log_error "empty commit message" $1 && exit 1
+fi
+
+if ! errors=$(valid_format "$without_comments" $1)
+then
+    log_error "$errors" $1 && exit 1
+fi
