@@ -35,6 +35,7 @@ set relativenumber
 set number
 " enables line numbering in the file browser
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
+let g:netrw_liststyle=3
 
 " sane regexes
 nnoremap / /\v
@@ -47,6 +48,7 @@ set cursorline
 :match ExtraWhitespace /\s\+$/
 
 let g:indentLine_faster = 1
+" set statusline+=%F
 
 " Save your swp files to a less annoying place than the current directory.
 " If you have .vim-swap in the current directory, it'll use that.
@@ -58,3 +60,6 @@ endif
   set directory+=~/.vim/swap//
   set directory+=~/tmp//
   set directory+=.
+
+filetype on
+au BufNewFile,BufRead *.coffee set filetype=coffee
