@@ -1,7 +1,8 @@
 export HISTCONTROL=ignoredups:erasedups
 export GIT_TREE=~/git_worktree
-export HISTSIZE=10000
+export HISTSIZE=100000
 shopt -s histappend
+shopt -s extglob
 
 export PROMPT_COMMAND="history -n; history -w; history -c; history -r"
 export EDITOR=vim
@@ -10,6 +11,8 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/opt/X11/lib/pkgconfig
 
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
+
+stty -ixon # enables ctrl-s for forward search in history
 
 alias ls="ls -lahG"
 alias s="git status"
@@ -79,3 +82,17 @@ tell application "Terminal"
     end repeat
 end tell
 END
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
+
+function f() {
+    find . -iname "*$1*"
+}
+
+function fuz() {
+    file=$(fzf -q ${2:-''})
+    $1 $file
+}
+
