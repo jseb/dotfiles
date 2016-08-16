@@ -18,7 +18,7 @@ alias ls="ls -lahG"
 alias s="git status"
 
 bupdate() {
-    for action in update doctor upgrade cleanup
+    for action in update doctor 'upgrade --all' cleanup 'cask cleanup' prune
     do
         echo "--> brew $action" && brew $action
     done
