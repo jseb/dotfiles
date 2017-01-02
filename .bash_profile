@@ -132,7 +132,7 @@ change_color_scheme() {
         else
             current_color='dark'
         fi
-        previous_color=$(cat ${tmp_file_prefix}_current_color)
+        previous_color=$(cat ${color_tmp_file})
         if [ $current_color != ${previous_color:-''} ]
         then
             set_color_scheme $current_color
