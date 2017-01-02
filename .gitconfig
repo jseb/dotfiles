@@ -5,14 +5,21 @@
 [merge]
 	tool = meld
 [user]
-	email = joel.andersson@gmail.com
 	name = Joel Andersson
-[pull]
-	rebase = true
+	useConfigOnly = true
 [core]
-	excludesfile = /Users/joelandersson/.gitignore_global
+	excludesfile = /Users/jandersson/.gitignore_global
 [color "diff-highlight"]
 	oldNormal = red bold
 	oldHighlight = red bold 52
 	newNormal = green bold
 	newHighlight = green bold 22
+[mergetool "meld"]
+    cmd = open -W -a Meld --args --auto-merge \"$PWD/$LOCAL\" \"$PWD/$BASE\" \"$PWD/$REMOTE\" --output=\"$PWD/$MERGED\"
+	trustExitCode = true
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 

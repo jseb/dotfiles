@@ -3,16 +3,11 @@ set nocompatible
 set ruler
 set laststatus=2
 
+set mouse=a
+
 execute pathogen#infect()
 
 syntax enable
-colorscheme solarized
-let hour = strftime("%H")
-if 6 <= hour && hour <= 17
-  set background=light
-else
-  set background=dark
-endif
 
 set expandtab
 set sw=4
@@ -24,6 +19,9 @@ autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 autocmd FileType eruby setlocal shiftwidth=2 tabstop=2
 autocmd FileType yaml setlocal shiftwidth=2 tabstop=2
 
+" two character tabs for javascript..
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+
 set hlsearch
 set incsearch
 set smartcase
@@ -33,9 +31,11 @@ set autoindent
 
 set relativenumber
 set number
+
 " enables line numbering in the file browser
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 let g:netrw_liststyle=3
+let g:netrw_browse_split=2
 
 " sane regexes
 nnoremap / /\v
@@ -44,8 +44,11 @@ vnoremap / /\v
 set colorcolumn=+1
 set cursorline
 
-:highlight ExtraWhitespace ctermbg=7
-:match ExtraWhitespace /\s\+$/
+highlight ExtraWhitespace ctermbg=3
+call matchadd('ExtraWhitespace', '\s\+$\|\t', 11)
+
+highlight OverLength ctermbg=lightgrey
+call matchadd('OverLength', '\%>80v.\+')
 
 let g:indentLine_faster = 1
 " set statusline+=%F
@@ -60,6 +63,3 @@ endif
   set directory+=~/.vim/swap//
   set directory+=~/tmp//
   set directory+=.
-
-filetype on
-au BufNewFile,BufRead *.coffee set filetype=coffee
