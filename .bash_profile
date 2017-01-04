@@ -19,7 +19,7 @@ alias ls="ls -lahG"
 alias s="git status"
 
 bupdate() {
-    for cmd in brew\ {update,doctor,upgrade,cleanup,'cask cleanup',prune}
+    for cmd in brew\ {update,doctor,upgrade,cleanup,prune}
     do
         echo "--> $cmd" && $cmd || return 1
     done
@@ -42,6 +42,8 @@ cask_upgrade() {
             brew cask install $cask --force
         fi
     done
+
+    brew cask cleanup
 }
 
 upgrade_npm() {
