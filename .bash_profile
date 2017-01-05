@@ -26,29 +26,38 @@ bupdate() {
 }
 
 cask_upgrade() {
-    red=`tput setaf 1`
-    green=`tput setaf 2`
-    reset=`tput sgr0`
+    casks=$(brew cask list)
+    infos=$(brew cask info $casks)
+    outdated=()
 
-    for cask in $(brew cask list)
+    for cask in $casks
     do
-        version=$(brew cask info $cask | sed -n "s/$cask:\ \(.*\)/\1/p")
-        installed=$(find "/usr/local/Caskroom/$cask" -type d -maxdepth 1 -maxdepth 1 -name "$version")
+        latest_version=$(sed -n "s/$cask:\ \(.*\)/\1/p" <<< "$infos")
 
-        if [ -z $installed ]
+        if [ ! -d "/usr/local/Caskroom/$cask/$latest_version" ]
         then
-            echo "A newer version of ${red}${cask}${reset} is available, upgrading.."
-            brew cask uninstall $cask --force
-            brew cask install $cask --force
+            outdated+=($cask)
         fi
     done
 
-    brew cask cleanup
+    if [ ${#outdated[@]} -gt 0 ]
+    then
+        echo "The following casks have new versions available: ${outdated[@]}"
+        for i in "${!outdated[@]}"
+        do
+            cask="${outdated[i]}"
+            echo "=> upgrading cask ($((i+1)) / ${#outdated[@]}): ${cask}"
+            brew cask uninstall $cask --force
+            brew cask install $cask --force
+        done
+        brew cask cleanup
+    else
+        echo "All casks are up to date, nothing do do."
+    fi
 }
 
 upgrade_npm() {
-    npm update -gf --loglevel=error 1>/dev/null 2>/dev/null || \
-        echo "there was a problem with upgrading npm packages.."
+    npm update -gf --loglevel=info
 }
 
 fetch_all() {
