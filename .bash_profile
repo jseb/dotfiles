@@ -46,7 +46,7 @@ cask_upgrade() {
         for i in "${!outdated[@]}"
         do
             cask="${outdated[i]}"
-            echo "=> upgrading cask ($((i+1)) / ${#outdated[@]}): ${cask}"
+            echo "=> upgrading cask ($((i+1))/${#outdated[@]}): ${cask}"
             brew cask uninstall $cask --force
             brew cask install $cask --force
         done
