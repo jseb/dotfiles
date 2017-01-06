@@ -109,7 +109,7 @@ hour_tmp_file=/tmp/${tmp_file_prefix}_current_hour
 
 for cache_file_name in $color_tmp_file $hour_tmp_file
 do
-    [ -f "$cache_file_name" ] && touch "$cache_file_name"
+    [ ! -f "$cache_file_name" ] && touch "$cache_file_name"
 done
 
 function set_color_scheme() {
@@ -132,12 +132,12 @@ end tell
 END
 }
 
-change_color_scheme() {
+update_color_scheme() {
     previous_hour=$(cat ${hour_tmp_file})
     current_hour=$(date +"%H")
     if [ $current_hour -ne ${previous_hour:-25} ]
     then
-        if [ $current_hour -gt 7 -a $current_hour -lt 18 ]
+        if [ $current_hour -gt 8 -a $current_hour -lt 18 ]
         then
             current_color='light'
         else
