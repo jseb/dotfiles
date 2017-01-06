@@ -66,8 +66,7 @@ fetch_all() {
     do
         repo_path=$(dirname "$git_dir")
         repo_name=$(sed -e 's/.*\///g' <<< "$repo_path")
-        cd $git_dir
-        cd ..
+        cd "$git_dir/.."
         if [ -z "$(git status --porcelain)" ]
         then
             echo "--> pulling $repo_name"
@@ -76,6 +75,7 @@ fetch_all() {
             echo "--> fetching $repo_name"
             git remote update
         fi
+        cd - > /dev/null
     done
 }
 
