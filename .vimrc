@@ -41,8 +41,14 @@ let g:netrw_browse_split=2
 nnoremap / /\v
 vnoremap / /\v
 
+set timeoutlen=1000 ttimeoutlen=0
+ino <C-C> <Esc>
+
 set colorcolumn=+1
 set cursorline
+
+autocmd InsertEnter * highlight  CursorLine cterm=None
+autocmd InsertLeave * highlight  CursorLine cterm=underline
 
 highlight ExtraWhitespace ctermbg=3
 call matchadd('ExtraWhitespace', '\s\+$\|\t', 11)
