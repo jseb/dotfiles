@@ -32,6 +32,9 @@ set autoindent
 set relativenumber
 set number
 
+" fixes cron 'must be edited in place' error
+set backupskip=/tmp/*,/private/tmp/*"
+
 " enables line numbering in the file browser
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 let g:netrw_liststyle=3
