@@ -42,14 +42,29 @@ cask_upgrade() {
 
     if [ ${#outdated[@]} -gt 0 ]
     then
+        failed=()
         echo "The following casks have new versions available: ${outdated[@]}"
         for i in "${!outdated[@]}"
         do
             cask="${outdated[i]}"
             echo "=> upgrading cask ($((i+1))/${#outdated[@]}): ${cask}"
             brew cask uninstall $cask --force
-            brew cask install $cask --force
+            retries=3
+            until brew cask install $cask --force || [ $retries -eq 0 ]
+            do
+                echo "ERROR: Could not install ${cask}, retrying.."
+                retries=$((retries-1))
+            done
+            if [ $retries -eq 0 ]
+            then
+                failed+=($cask)
+            fi
         done
+        if [ ${#failed[@]} -gt 0 ]
+        then
+            echo "WARNING: The follow cask(s) were uninstalled and could not \
+                be reinstalled: ${failed[@]}"
+        fi
         brew cask cleanup
     else
         echo "All casks are up to date, nothing do do."
