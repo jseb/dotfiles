@@ -179,6 +179,9 @@ update() {
     echo "=> fetching git repositories" && fetch_all
 }
 
+pid_by_port() {
+    lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | uniq
+}
 
 # You can put these two commands in your local shell initialization script
 # e.g. ~/.bashrc or ~/.zshrc
