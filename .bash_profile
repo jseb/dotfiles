@@ -25,6 +25,10 @@ bupdate() {
     done
 }
 
+capitalize() {
+    echo $(tr '[:lower:]' '[:upper:]' <<< ${1:0:1})$(tr '[:upper:]' '[:lower:]' <<< ${1:1})
+}
+
 cask_upgrade() {
     casks=$(brew cask list)
     infos=$(brew cask info $casks)
@@ -42,14 +46,29 @@ cask_upgrade() {
 
     if [ ${#outdated[@]} -gt 0 ]
     then
+        failed=()
         echo "The following casks have new versions available: ${outdated[@]}"
         for i in "${!outdated[@]}"
         do
             cask="${outdated[i]}"
             echo "=> upgrading cask ($((i+1))/${#outdated[@]}): ${cask}"
             brew cask uninstall $cask --force
-            brew cask install $cask --force
+            retries=3
+            until brew cask install $cask --force || [ $retries -eq 0 ]
+            do
+                echo "ERROR: Could not install ${cask}, retrying.."
+                retries=$((retries-1))
+            done
+            if [ $retries -eq 0 ]
+            then
+                failed+=($cask)
+            fi
         done
+        if [ ${#failed[@]} -gt 0 ]
+        then
+            echo "WARNING: The follow cask(s) were uninstalled and could not \
+                be reinstalled: ${failed[@]}"
+        fi
         brew cask cleanup
     else
         echo "All casks are up to date, nothing do do."
@@ -113,14 +132,8 @@ do
 done
 
 function set_color_scheme() {
-    color_scheme=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-    if [ $color_scheme = 'dark' ]
-    then
-        terminalscheme='Solarized Dark'
-    else
-        terminalscheme='Solarized Light'
-    fi
-    setting="(first settings set whose name is \"$terminalscheme\")"
+    color_scheme=$(capitalize "$1")
+    setting="(first settings set whose name is \"Solarized $color_scheme\")"
     osascript << END
 tell application "Terminal"
     repeat with w from 1 to count windows
