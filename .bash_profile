@@ -29,52 +29,6 @@ capitalize() {
     echo $(tr '[:lower:]' '[:upper:]' <<< ${1:0:1})$(tr '[:upper:]' '[:lower:]' <<< ${1:1})
 }
 
-cask_upgrade() {
-    casks=$(brew cask list)
-    infos=$(brew cask info $casks)
-    outdated=()
-
-    for cask in $casks
-    do
-        latest_version=$(sed -n "s/$cask:\ \(.*\)/\1/p" <<< "$infos")
-
-        if [ ! -d "/usr/local/Caskroom/$cask/$latest_version" ]
-        then
-            outdated+=($cask)
-        fi
-    done
-
-    if [ ${#outdated[@]} -gt 0 ]
-    then
-        failed=()
-        echo "The following casks have new versions available: ${outdated[@]}"
-        for i in "${!outdated[@]}"
-        do
-            cask="${outdated[i]}"
-            echo "=> upgrading cask ($((i+1))/${#outdated[@]}): ${cask}"
-            brew cask uninstall $cask --force
-            retries=3
-            until brew cask install $cask --force || [ $retries -eq 0 ]
-            do
-                echo "ERROR: Could not install ${cask}, retrying.."
-                retries=$((retries-1))
-            done
-            if [ $retries -eq 0 ]
-            then
-                failed+=($cask)
-            fi
-        done
-        if [ ${#failed[@]} -gt 0 ]
-        then
-            echo "WARNING: The follow cask(s) were uninstalled and could not \
-                be reinstalled: ${failed[@]}"
-        fi
-        brew cask cleanup
-    else
-        echo "All casks are up to date, nothing do do."
-    fi
-}
-
 upgrade_npm() {
     npm update -gf --loglevel=info
 }
@@ -115,6 +69,11 @@ get_source_dir() {
     dir="$( cd -P "$( dirname "$source" )" && pwd )"
     echo "$dir"
 }
+
+cask_upgrade() {
+    $(get_source_dir)/lib/cask-upgrade/cask-upgrade "$@"
+}
+
 source $(get_source_dir)/lib/git-prompt/git-prompt
 PROMPT_COMMAND="$PROMPT_COMMAND; git_prompt"
 
@@ -187,7 +146,7 @@ alias vim="/Applications/MacVim.app/Contents/MacOS/Vim"
 
 update() {
     echo "=> updating homebrew" && bupdate && \
-    echo "=> upgrading casks" && cask_upgrade && \
+    echo "=> upgrading casks" && cask_upgrade -n && \
     echo "=> upgrading npm" && upgrade_npm && \
     echo "=> fetching git repositories" && fetch_all
 }
