@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 export HISTCONTROL=ignoredups:erasedups
 export GIT_TREE=~/git_worktree
 export HISTSIZE=100000
