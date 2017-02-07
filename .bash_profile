@@ -28,7 +28,7 @@ bupdate() {
 }
 
 capitalize() {
-    echo $(tr '[:lower:]' '[:upper:]' <<< ${1:0:1})$(tr '[:upper:]' '[:lower:]' <<< ${1:1})
+    echo "$(tr '[:lower:]' '[:upper:]' <<< "${1:0:1}")$(tr '[:upper:]' '[:lower:]' <<< "${1:1}")"
 }
 
 upgrade_npm() {
@@ -73,10 +73,10 @@ get_source_dir() {
 }
 
 cask_upgrade() {
-    $(get_source_dir)/lib/cask-upgrade/cask-upgrade "$@"
+    "$(get_source_dir)"/lib/cask-upgrade/cask-upgrade "$@"
 }
 
-source $(get_source_dir)/lib/git-prompt/git-prompt
+source "$(get_source_dir)"/lib/git-prompt/git-prompt
 PROMPT_COMMAND="$PROMPT_COMMAND; git_prompt"
 
 alias p1="mpg123 -@ http://sverigesradio.se/topsy/direkt/132-hi-mp3.m3u"
@@ -109,38 +109,38 @@ END
 update_color_scheme() {
     previous_hour=$(cat ${hour_tmp_file})
     current_hour=$(date +"%H")
-    if [ $current_hour -ne ${previous_hour:-25} ]
+    if [ "$current_hour" -ne "${previous_hour:-25}" ]
     then
-        if [ $current_hour -gt 8 ] && [ $current_hour -lt 18 ]
+        if [ "$current_hour" -gt 8 ] && [ "$current_hour" -lt 18 ]
         then
             current_color='light'
         else
             current_color='dark'
         fi
         previous_color=$(cat ${color_tmp_file})
-        if [ $current_color != ${previous_color:-''} ]
+        if [ "$current_color" != "${previous_color:-''}" ]
         then
             set_color_scheme $current_color
             echo $current_color > ${color_tmp_file}
         fi
-        echo $current_hour > ${hour_tmp_file}
+        echo "$current_hour" > "${hour_tmp_file}"
     fi
 }
 
-file=$(ls -C $(brew --prefix)/etc/bash_completion 2> /dev/null) && . "$file"
+file=$(ls -C "$(brew --prefix)"/etc/bash_completion 2> /dev/null) && . "$file"
 
 function f() {
     find . -iname "*$1*"
 }
 
 function fuz() {
-    file=$(fzf -q ${2:-''})
-    $1 $file
+    file=$(fzf -q "${2:-''}")
+    "$1" "$file"
 }
 
 function playdir() {
     dir=${1:-'.'}
-    mpg123 -Z $(find "$dir" -iname '*.mp3' -print)
+    mpg123 -Z "$(find "$dir" -iname '*.mp3' -print)"
 }
 
 # Much faster than /usr/bin/vim
@@ -154,7 +154,7 @@ update() {
 }
 
 pid_by_port() {
-    lsof -i tcp:$1 | awk 'NR!=1 {print $2}' | uniq
+    lsof -i tcp:"$1" | awk 'NR!=1 {print $2}' | uniq
 }
 
 # You can put these two commands in your local shell initialization script
