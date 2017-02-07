@@ -109,7 +109,7 @@ update_color_scheme() {
     current_hour=$(date +"%H")
     if [ $current_hour -ne ${previous_hour:-25} ]
     then
-        if [ $current_hour -gt 8 -a $current_hour -lt 18 ]
+        if [ $current_hour -gt 8 ] && [ $current_hour -lt 18 ]
         then
             current_color='light'
         else
