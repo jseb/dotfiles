@@ -37,7 +37,7 @@ upgrade_npm() {
 
 fetch_all() {
     [ -z "$GIT_TREE" ] && return
-    for git_dir in $(find $GIT_TREE -name .git -type d)
+    find $GIT_TREE -name .git -type d | while read -r git_dir
     do
         repo_path=$(dirname "$git_dir")
         repo_name=$(sed -e 's/.*\///g' <<< "$repo_path")
